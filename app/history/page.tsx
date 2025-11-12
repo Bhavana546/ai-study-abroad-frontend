@@ -20,7 +20,7 @@ export default function ChatHistoryPage() {
   useEffect(() => {
     async function fetchHistory() {
       try {
-        const res = await axios.get("`${process.env.NEXT_PUBLIC_API_URL}/chat/history");
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/chat/history`);
         setHistory(res.data);
       } catch (err: unknown) {
         if (err instanceof Error) {

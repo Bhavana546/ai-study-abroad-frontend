@@ -28,7 +28,7 @@ export default function ChatPage() {
     try {
       const token = localStorage.getItem("token");
       const res = await axios.post(
-        "`${process.env.NEXT_PUBLIC_API_URL}/chat/ask",
+        `${process.env.NEXT_PUBLIC_API_URL}/chat/ask`,
         { question, country: "USA" },
         { headers: { Authorization: `Bearer ${token}` } }
       );

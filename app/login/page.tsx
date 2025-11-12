@@ -15,7 +15,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const res = await axios.post("`${process.env.NEXT_PUBLIC_API_URL}/auth/login", formData);
+      const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, formData);
       localStorage.setItem("token", res.data.access_token);
       setMessage("✅ Login successful! Redirecting...");
       setTimeout(() => router.push("/chat"), 1000);

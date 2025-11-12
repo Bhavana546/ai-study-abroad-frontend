@@ -4,7 +4,11 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
-  const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [message, setMessage] = useState("");
   const router = useRouter();
 
@@ -14,14 +18,22 @@ export default function SignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     try {
-      const res = await axios.post("`${process.env.NEXT_PUBLIC_API_URL}/auth/signup", formData);
-      // or use deployed backend:
-      // const res = await axios.post("https://ai-study-abroad-backend.onrender.com/auth/signup", formData);
+      // 🔹 Clean & trim password before sending
+      const sanitizedData = {
+        ...formData,
+        password: formData.password.trim().replace(/\s+/g, "").slice(0, 72),
+      };
+
+      const res = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/signup`,
+        sanitizedData
+      );
 
       localStorage.setItem("token", res.data.access_token);
       setMessage("✅ Signup successful! Redirecting...");
-      setTimeout(() => router.push("/chat"), 1500); // auto redirect to chat
+      setTimeout(() => router.push("/chat"), 1500);
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         console.error("Signup error:", err.response?.data);
@@ -38,7 +50,10 @@ export default function SignupPage() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-blue-50 to-blue-200">
-      <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-lg w-96">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white p-8 rounded-xl shadow-lg w-96"
+      >
         <h2 className="text-2xl font-bold text-center mb-6 text-blue-600">
           Create Account
         </h2>
@@ -73,12 +88,14 @@ export default function SignupPage() {
         >
           Sign Up
         </button>
+
         <p className="text-center mt-4 text-sm">
           Already have an account?{" "}
           <a href="/login" className="text-blue-600 underline">
             Login
           </a>
         </p>
+
         {message && <p className="text-center mt-4 text-gray-700">{message}</p>}
       </form>
     </div>
